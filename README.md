@@ -7,13 +7,17 @@ It may go by different folders, so I explain here each one are what.
 -------------
 
 ## PyCrypto v.2026.8.12
-Simple AES algorithm encryption of a clear text to cipher, using salt, nonce and argon based key.
-**So what actually it does?**
-It's a demonstration on how to encrypt a clear text (data), in a way that:
-- *How avoid compromising a cipher text if same data is leaked in other place?*
-  - By this solutions you can encrypt using same key, the same plain text, but get different cipher texts. How?
-    - Adding salt to the key generation using argon2 hash, causing our key to be different each time even with same password
-    - Adding nonce to the encryption process, so the cipher text gets random output even if the key and plain text are same
-    - *"So in short we got 2 different randomization in process, each at their own spot"*
-- *How to make a key generation resource demanding and time consuming to make brute force harder*
-  - using argon2, we turn the password in hash, but not as fast as sha256, but time consuming and demanding specific resource
+
+Simple AES-GCM encryption of plaintext data into ciphertext, using a salt, nonce, and Argon2id-derived key.
+
+**So what actually does it do?**
+
+It's a demonstration of encrypting plaintext data in a way that:
+
+- *we can avoid identical plaintext producing identical ciphertext*
+  - The same plaintext can be encrypted using the same password/key while producing different ciphertexts:
+    - A random salt is used during Argon2id key derivation, producing a different derived key when a different salt is used.
+    - A nonce is used during AES-GCM encryption, making each encryption operation unique even when the key and plaintext are the same.
+
+- *We can make key derivation more resource-intensive to make brute-force attacks harder*
+  - Argon2id is used to derive the encryption key from the password with intentionally high computational and memory costs, making password guessing more expensive than with fast hashing algorithms such as SHA-256.
